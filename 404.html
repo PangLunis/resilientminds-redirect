@@ -7,11 +7,27 @@
 <meta name="robots" content="noindex">
 <meta http-equiv="refresh" content="0; url=https://resilientmindsma.com/">
 <script>
-  // Preserve whatever path/query the visitor arrived with.
+  // Map the OLD Wix URLs (still in Google's index) onto their real pages on the new
+  // site. Previously this blindly appended window.location.pathname, so every indexed
+  // old URL — /meet-jaime, /about-us, /services … — landed on a 404. Anything we don't
+  // recognise now goes to the homepage rather than a dead page.
   (function () {
     var base = "https://resilientmindsma.com";
-    var target = base + window.location.pathname + window.location.search + window.location.hash;
-    window.location.replace(target);
+    var map = {
+      "/meet-jaime":          "/about.html",
+      "/about-us":            "/about.html",
+      "/services":            "/services.html",
+      "/insurance":           "/insurance.html",
+      "/copy-of-fees":        "/insurance.html",
+      "/policies-procedures": "/policies.html",
+      "/contact":             "/#contact"
+    };
+    var p = (window.location.pathname || "/").replace(/\/+$/, "").toLowerCase() || "/";
+    var dest = map[p] || "/";
+    var hash = "";
+    var hi = dest.indexOf("#");
+    if (hi >= 0) { hash = dest.slice(hi); dest = dest.slice(0, hi); }
+    window.location.replace(base + dest + (window.location.search || "") + hash);
   })();
 </script>
 <style>
